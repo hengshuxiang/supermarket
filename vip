@@ -1,0 +1,530 @@
+#include <time.h>                    //随机数所需函数 加在顶端
+
+int whethermember=0;                   //对于会员是否登陆的判断
+
+typedef struct The_members  
+{
+	char name[15];//姓名为字符串 
+	long phone; //电话号码为长整型 
+    char id[11]; //账号 
+    char key[20]; //密码 
+}members;                                 //会员部分结构数组
+
+int main()
+{
+     
+    int shopChoose;//选择登陆方式 
+    int flag = 1;//判断 
+     
+    while (flag == 1)
+    {
+        printf("\t\t\t\t\t   ╭  % ╮               ╭ ```╮  \n");
+        printf("\t\t\t\t\t   (@^o^@) 超市管理系统 (⌒:⌒)\n");
+        printf("\t\t\t\t\t   (~):(~)              (~)v(~) \n");
+        printf("%70s","\t\t┏┅┅┅┅┅┅┅┅┅┅┅┅┅☆\n");
+        printf("%66s","[ 1.管理员登陆  ]\n"); 
+        printf("%66s","[ 2.客户登陆    ]\n");
+         printf("%66s","[ 3.会员登陆    ]\n");    //对于主函数的修改
+        printf("%70s","\t\t┗┅┅┅┅┅┅┅┅┅┅┅┅┅┛\n");
+        printf("请选择：");
+         
+        scanf("%d",&shopChoose); 
+ 
+       
+        switch(shopChoose)
+        {
+        case 1://管理员
+            system("pause"); 
+            system("cls");
+            set(); 
+            break; 
+         
+        case 2://客户
+            system("cls"); 
+            set1();
+            break;
+        case 3: //会员                                           //对于主函数的修改
+            system("pause"); 
+            system("cls");
+            set3(); 
+            break;    
+        default:
+            printf("输入错误，请重新输入\n");
+            system("pause");
+            system("cls"); 
+            break; 
+         
+        }   
+     
+    }
+     
+    printf("\n");
+    system("pause");
+    return 0;
+}
+
+                                         //会员部分主体内容 直接复制粘贴到set()之后
+void set3()
+{
+     
+    int choose;         //用户输入的选择 
+    int ture = 1;       //循环判断真假 
+     
+     
+    while(ture != 0)
+    {
+         system("color f5"); 
+        printf("\t\t\t\t\t   ╭  % ╮               ╭ ```╮  \n");
+        printf("\t\t\t\t\t   (@^o^@) 超市会员登录系统 (⌒:⌒)\n");
+        printf("\t\t\t\t\t   (~):(~)              (~)v(~) \n");
+        printf("%70s","\t\t┏┅┅┅┅┅┅┅┅┅┅┅┅┅☆\n");
+        printf("%66s","[ 1.注册会员    ]\n"); 
+        printf("%66s","[ 2.登陆会员    ]\n");
+        printf("%66s","[ 3.忘记密码    ]\n");
+        printf("%70s","\t\t┗┅┅┅┅┅┅┅┅┅┅┅┅┅┛\n");
+        printf("请选择：");     
+ 
+        scanf("%d",&choose);
+          
+        switch(choose)
+        {
+        case 1:  
+            getchar();
+            system("cls");  
+            registermembers();    //注册账户
+            break; 
+             
+        case 2:     
+            progress();     //进度条 
+            system("cls");
+             MemberInput_login();  //登录账户
+            getchar();
+            ture=0;
+            break;
+             
+        case 3:     
+            getchar();
+           memberfind();       //找回密码 
+            break;
+             
+        default:
+            getchar();
+            rewind(stdin);      //清除键盘缓存 
+            printf("输入错误，请重新输入！\n");
+            system("pause");
+            system("cls");
+            break;   
+        } 
+     
+    }
+     
+}
+ 
+void Membership_File()
+{
+    FILE *fp;
+     
+    if ((fp = fopen("members.txt","rb"))==NULL)               /*判断文件是否存在*/
+    {
+        if ((fp = fopen("members.txt","wb+"))==NULL)          /*读写二进制*/
+        {
+            printf("无法建立文件！\n");
+            exit(0);
+             
+        }
+    }
+}
+ 
+ 
+/*-------
+ 注册账号
+---------*/
+ 
+void registermembers()  
+{    
+    //按结构体的大小，一次写入或者读入1个结构体大小
+     
+     members a,b; //结构体 The_members 重命名定义
+     FILE *fp;  //定义头文件 fp 
+      
+      
+     char temp[20];//存放密码，二次确认 
+     int count = 0;
+     int flag = 1;
+     char memberchoice;
+     char signchoice;
+     printf("请 问 您 有 会 员 吗 ？ y/n \n");
+    scanf("%c",&memberchoice);
+    if(memberchoice=='n'){
+    	printf("请 问 您 想 注 册 会 员 吗 ?  y/n \n");
+    		getchar();
+    	scanf("%c",&signchoice);
+    	if(signchoice=='y'){
+		system("cls");//清屏 
+         Sleep(800);
+         system("color f5");
+	 printf("                --------------------------\n");
+     printf("                    欢迎来到会员注册界面！\n");
+      printf("                --------------------------\n") ;
+     fflush(stdin); //清空输入缓存的函数，在输入字符之前调用它可以清除之前未读取的字符。
+     Sleep(500);   //Sleep是指输出的间隔 
+      
+     fp = fopen("members.txt","r");
+      
+     fread(&b, sizeof(struct The_members), 1, fp); //读出数据存放的地址 b  
+      
+    printf("请输入姓名：\n");
+     scanf("%s",&a.name);
+      
+      
+     printf("请输入电话号码：\n");
+     scanf("%ld",&a.phone);
+     
+     printf("请输入账号（用户名)\n");
+     scanf("%s",&a.id);
+      
+         while (flag)
+         {    
+             if (strcmp(a.id, b.id)) /*如果两串不相等*/
+             {
+                 if (!feof(fp))    /*如果未到文件尾*/                                
+                 {
+                     fread(&b, sizeof(struct The_members), 1, fp);
+                 }
+                 else
+                  
+                     break;
+                      
+             }
+             else
+             {   
+                 printf("此用户名名已存在！请重新选择！\n");
+                   
+                 getchar();
+                 rewind(stdin);
+                 Sleep(800); 
+                 system("cls");
+                  
+                 return;      
+             }
+         }
+          
+    
+      
+     printf("请输入密码\n");
+     scanf(" %s",&a.key);
+      
+     printf("请确认密码\n");
+     scanf(" %s",&temp);
+      
+     do{
+         
+        if(!strcmp(a.key,temp))
+         {
+            fp = fopen("members.txt","a");//追加一个账号 
+             
+             fwrite(&a, sizeof(struct The_members), 1, fp);/* a 待写入文件的指针 （地址）*/
+              
+             printf("会员注册成功，请返回登录界面进行登录。。。\n"); 
+             Sleep(500);
+             fclose(fp);
+              
+             return;
+         }
+             else
+             {
+                printf("两次密码不匹配！请重新输入！\n");
+                getchar();
+                scanf("%s",&a.key);
+                 
+                printf("请确认密码\n");
+                scanf("%s",&temp);
+             }
+              
+     }while(1);
+ }
+   if(memberchoice=='y'){
+    return;
+	}
+
+}
+}
+ 
+ 
+/*---------
+ 登录系统
+---------*/
+ 
+void  MemberInput_login()
+{
+    members a,b;  //定义结构体The_members别名
+     
+    FILE *fp;   //文件 
+    int i = 0;
+     
+    system("cls");
+     
+   system("color f5");
+     
+    printf("\n\n\n\n");
+    printf("\t\t\t\t\t\t欢迎来到会员登录界面！\n");
+     
+    Sleep(1500);
+    system("cls");//清屏 
+    Sleep(800);
+     
+    fp = fopen("members.txt","r");
+     
+    fread(&b, sizeof(struct The_members), 1, fp); //读入一个结构体字符块 写入b
+    
+        printf("\n\n");
+        printf("\t\t\t\t   │============================================│\n");
+        printf("\t\t\t\t   │ 请输入用户名：                         │\n");
+        printf("\t\t\t\t   │============================================│\n");
+         
+        cursor(50,3);
+        scanf("%s",&a.id);
+     
+         while (1)
+           {   
+               if (strcmp(a.id, b.id)==0)         //如果有此用户名
+               {
+                   break;       
+               }
+                
+               else
+               {
+                if (fp == NULL)
+                {
+                    printf("还 未 拥 有 会 员 注 册 信 息，请 注 册\n");
+                    system("pause");
+                    system("cls");
+                    set();
+                }
+                                 
+                 
+                   if (!feof(fp))  //如果文件没有读完                            
+                 
+                   {
+                       fread(&b, sizeof(struct The_members), 1, fp);
+                       /*读出数据 b 存放的地址位置，内存大小，每次读取一个数据块 1 ，以读的方式打开文件*/
+                   }
+                    
+                   else
+                   {
+                       printf("此 会 员 名 不 存 在，请 重 新 选 择！\n");
+                        
+                       Sleep(500); 
+                       fclose(fp); 
+                       getchar(); 
+                        
+                       return;              
+                   }
+                    
+               }
+                
+       }
+        
+        printf("\n\n\n");
+        printf("\t\t\t\t   │============================================│\n");
+        printf("\t\t\t\t   │ 请输入密码：                         │\n");
+        printf("\t\t\t\t   │============================================│\n");
+     
+        cursor(50,8);
+ 
+        while( (a.key[i]=getch()) != 13 )//getch()返回值是一个键值，回车的键值是13
+        {                                   //将输入的密码存储在数组中在屏幕上输出‘* ’代替数字 
+            i++;
+            printf("*");//隐藏密码
+        }
+        a.key[i]='\0';//把最后的回车变成结束符（数组） 
+        printf("\n");
+         
+    do{   
+            
+        if (strcmp(a.key, b.key)==0)            /*如果密码匹配*/
+                
+           {  
+              fclose(fp);
+               
+              Sleep(500);
+              printf("\n\n\t\t\t\t\t\tVIP登录进行中");
+               
+              Sleep(500);
+              printf(".");
+              printf(".");
+              Sleep(500);
+              printf(".");
+              Sleep(500);
+              printf(".");
+              Sleep(500);
+              printf(".\n");
+              Sleep(1000);
+              fflush(stdin);
+               
+              printf("\n\n\t\t\t\t\t\t登 录 成 功，即 刻 享 受 会 员 权 益 !");
+              	FILE *ph;
+	          ph = fopen("phone.txt","a");
+              fprintf(ph,"\n您好，尊敬的会员%s，您已成功登录，衷心祝愿您有一个良好的购物体验。若非本人操作请及时联系客服处理\n",a.id);
+              fclose(ph);
+              Sleep(1000);
+              system("cls"); 
+              printf("您 好，尊 敬 的 会 员%s\n",a.id);
+              whethermember=1;
+              return;
+              }
+           else 
+           { 
+            
+            printf("密码错误！");
+            printf("\n\n\n");
+            printf("\t\t\t\t   │============================================│\n");
+            printf("\t\t\t\t   │ 请输入密码：                         │\n");
+            printf("\t\t\t\t   │============================================│\n");
+         
+            cursor(50,13);
+            scanf("%s",&a.key);    
+                     
+           }
+       
+    
+   }
+    while(strcmp(a.key, b.key)==0);
+        
+}
+ 
+ 
+ 
+ 
+ 
+/*---------
+ 找回密码
+----------*/
+ 
+void memberfind()  //按结构体的大小，一次写入或者读入1个结构体大小
+{    
+     members a,b;//结构体 The_users 重命名定义
+     FILE *fp;
+      
+     char temp[20];
+     //int count = 0;
+      
+     printf("欢 迎 来 到 找 回 密 码 界 面 ，密 码 找 回 需 要 对 您 进 行 身 份 验 证\n");
+     Sleep(1000);
+      
+     fp = fopen("members.txt","r");
+ 
+     fread(&b, sizeof(struct The_members), 1, fp); //读入一个结构体字符块 写入b
+      
+     system("cls");
+     system("color f5"); 
+      
+    printf("\n\n");
+    printf("\t\t\t\t   │============================================│\n");
+    printf("\t\t\t\t   │ 请输入账号：                         │\n");
+    printf("\t\t\t\t   │============================================│\n");
+     
+    cursor(50,3);
+    scanf("%s",&a.id); 
+     
+        while (1)
+           {   
+               if (strcmp(a.id, b.id)==0)         //如果有此用户名
+               {
+                   break;       
+               }
+                
+               else
+               {
+                   if (!feof(fp))  //如果文件没有读完                            
+                 
+                   {
+                       fread(&b, sizeof(struct The_members), 1, fp);
+                       //从文件中拷贝一个大小为struct The_members的数据 
+                   }
+                    
+                   else
+                   {
+                       printf("此 用 户 名 不 存 在 ，请 重 新 选 择 ！\n");
+                        
+                       Sleep(500); 
+                       fclose(fp);  
+                       getchar();
+                        
+                       return;              
+                   }
+                    
+               }
+                
+       }
+        
+        
+         printf("\n\n");
+         printf("请 输 入 姓 名：\n");
+         scanf("%s",&a.name);
+        
+         do
+         {
+            if(strcmp(a.name,b.name))
+             {
+                printf("姓 名 输 入 错 误 ！请 重 新 输 入 ！\n");
+                getchar();
+                scanf("%s",&a.name);
+             }
+         }
+         while(strcmp(a.name,b.name));
+          
+         printf("请 输 入 电 话 号 码 ：\n");
+         scanf("%ld",&a.phone);
+          
+         do{
+            if(a.phone != b.phone)
+             {
+                printf("电 话 号 码 输 入 错 误 ！请 重 新 输 入 ！\n");
+                getchar();
+                scanf("%ld",&a.phone);
+             }
+         }
+         while(a.phone != b.phone);
+         
+         
+    long checknumber;
+    srand(time(0));
+	char g[5],w[5];
+	char first,second, third, forth;
+	int i,j,k;
+	for(i=0;i<4;i++)
+	{
+		first = rand()%10+48;
+		second = rand()%26+65;
+		third = rand()%26+97;
+		forth = rand()%100+1;
+		if(forth<33) g[i]=first;
+		else
+		if(forth>=33&&forth<63) g[i]=second;
+		else g[i]=third;
+		
+	}
+	FILE *ph;
+	ph = fopen("phone.txt","a");//追加一个账号         
+    fprintf(ph,"\n您好，尊敬的用户%s，本次身份验证的验证码为：%s。若非本人操作请及时联系客服处理\n",a.id,g);
+    fclose(ph); 
+	printf("验 证 码 已 经 发 送 至 您 的 手 机\n");
+		printf("请 输 入 验 证 码 ：\n");
+	scanf("%s",w);
+	while(strcmp(g,w))
+	{
+		printf("验 证 码 错 误，请 重 新 输 入 \n:");
+		scanf("%s",w); 
+	}
+	printf("验证成功！");
+    printf("您 的 密 码 为 ：%s, 请 记 住 它 哟 ~\n",b.key);
+	
+		
+        
+        Sleep(3000);
+        system("pause");
+        system("cls");
+}
+
+ 
